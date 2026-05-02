@@ -1,7 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-export const SearchInput = () => {
+export const SearchInput = ({ onChange }) => {
   const [value, setValue] = useState("");
+
+  useEffect(() => {
+    onChange(value);
+  }, [value]);
 
   return (
     <div className="relative">
