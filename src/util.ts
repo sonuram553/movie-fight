@@ -2,15 +2,23 @@ import axios from "axios";
 
 const BASE_URL = "https://www.omdbapi.com";
 
-export async function fetchMovies(search: string) {
-  const res = await axios.get(BASE_URL, {
-    params: {
-      apikey: "4f174979",
-      s: search,
-    },
-  });
+export interface MovieResult {
+  Title: string;
+  Year: string;
+  imdbID: string;
+  Poster: string;
+}
 
-  console.log(res.data);
+export async function fetchMovies(
+  search: string,
+): Promise<{ results: MovieResult[]; error: string | null }> {
+  const res = await axios.get(BASE_URL, {
+    params: { apikey: "4f174979", s: search },
+  });
+  if (res.data.Response === "False") {
+    return { results: [], error: res.data.Error };
+  }
+  return { results: res.data.Search ?? [], error: null };
 }
 
 export function debounce(fn, delay = 200) {
