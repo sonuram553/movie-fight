@@ -1,20 +1,15 @@
-import axios from "axios";
 import { SearchInput } from "./search";
-
-const BASE_URL = "https://www.omdbapi.com";
+import { debounce, fetchMovies } from "./util";
+import { useMemo } from "react";
 
 export const Movie = () => {
-  const fetchMovies = (search: string) => {
-    axios.get(BASE_URL, {
-      params: {
-        apikey: "4f174979",
-        s: search,
-      },
-    });
-  };
+  const debouncedSearch = useMemo(
+    () =>
+      debounce((value: string) => {
+        fetchMovies(value);
+      }),
+    [],
+  );
 
-  const onSearchTermChange = (value: string) => {
-    fetchMovies(value);
-  };
-  return <SearchInput onChange={onSearchTermChange} />;
+  return <SearchInput onChange={debouncedSearch} />;
 };
