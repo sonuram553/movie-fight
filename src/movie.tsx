@@ -1,8 +1,9 @@
 import { useState, useMemo } from "react";
 import { SearchInput } from "./search";
 import { MovieDropdown } from "./MovieDropdown";
-import { debounce, fetchMovies } from "./util";
+import { BASE_URL, debounce, fetchMovies } from "./util";
 import type { MovieResult } from "./util";
+import axios from "axios";
 
 export const Movie = () => {
   const [results, setResults] = useState<MovieResult[]>([]);
@@ -23,10 +24,22 @@ export const Movie = () => {
     [],
   );
 
+  const fetchMovieDetails = async (movieId: string) => {
+    setResults([]);
+    setError(null);
+    const res = await axios.get(BASE_URL, {
+      params: { apikey: "4f174979", i: movieId },
+    });
+  };
+
   return (
     <div className="relative">
       <SearchInput onChange={debouncedSearch} />
-      <MovieDropdown results={results} error={error} />
+      <MovieDropdown
+        results={results}
+        error={error}
+        onSelectMovie={fetchMovieDetails}
+      />
     </div>
   );
 };
