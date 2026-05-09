@@ -9,6 +9,17 @@ export interface MovieResult {
   Poster: string;
 }
 
+export interface MovieDetails {
+  Title: string;
+  Genre: string;
+  Plot: string;
+  Poster: string;
+  Awards: string;
+  BoxOffice: string;
+  Metascore: string;
+  imdbRating: string;
+}
+
 export async function fetchMovies(
   search: string,
 ): Promise<{ results: MovieResult[]; error: string | null }> {
