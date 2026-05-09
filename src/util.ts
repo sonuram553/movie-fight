@@ -15,7 +15,7 @@ export interface MovieDetails {
   Plot: string;
   Poster: string;
   Awards: string;
-  BoxOffice: string;
+  BoxOffice?: string;
   Metascore: string;
   imdbRating: string;
 }
@@ -30,6 +30,15 @@ export async function fetchMovies(
     return { results: [], error: res.data.Error };
   }
   return { results: res.data.Search ?? [], error: null };
+}
+
+export function parseBoxOffice(s: string | undefined): number {
+  return parseInt((s ?? "").replace(/[$,]/g, "")) || 0;
+}
+
+export function parseAwards(s: string): number {
+  const matches: string[] = s.match(/\d+/g) ?? [];
+  return matches.reduce((sum, n) => sum + parseInt(n), 0);
 }
 
 export function debounce(fn, delay = 200) {

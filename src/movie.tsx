@@ -6,7 +6,13 @@ import { BASE_URL, debounce, fetchMovies } from "./util";
 import type { MovieResult, MovieDetails } from "./util";
 import axios from "axios";
 
-export const Movie = () => {
+interface Props {
+  side: "left" | "right";
+  onDetailsChange: (details: MovieDetails | null) => void;
+  winners: Record<string, "left" | "right" | null>;
+}
+
+export const Movie = ({ side, onDetailsChange, winners }: Props) => {
   const [results, setResults] = useState<MovieResult[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [details, setDetails] = useState<MovieDetails | null>(null);
@@ -33,6 +39,7 @@ export const Movie = () => {
       params: { apikey: "4f174979", i: movieId },
     });
     setDetails(res.data);
+    onDetailsChange(res.data);
   };
 
   return (
@@ -43,7 +50,7 @@ export const Movie = () => {
         error={error}
         onSelectMovie={fetchMovieDetails}
       />
-      {details && <MovieDetail details={details} />}
+      {details && <MovieDetail details={details} side={side} winners={winners} />}
     </div>
   );
 };
