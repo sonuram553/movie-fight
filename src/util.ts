@@ -46,8 +46,6 @@ export function debounce(fn, delay = 200) {
 
   return function (...args) {
     clearTimeout(timeoutId);
-    timeoutId = setTimeout(() => {
-      fn.apply(this, args);
-    }, delay);
+    timeoutId = setTimeout(() => fn(...args), delay);
   };
 }
